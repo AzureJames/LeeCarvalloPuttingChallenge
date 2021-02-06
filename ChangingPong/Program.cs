@@ -14,13 +14,15 @@ namespace BreakOut
         static int ballPositionY = 0;
         static int ballDirectionX = -1;
         static int ballDirectionY = 1;
-        static int firstPlayerPosition = 0;
         static int point = 0;
+        static int clubLength = 10;
+        static int clubDrift = 1;
+        Random randomLength = new Random();
 
         static void SetBallAtTheMiddleOfTheGameField()
         {
-            ballPositionX = Console.WindowWidth / 2;
-            ballPositionY = Console.WindowHeight / 2;
+            ballPositionX = Console.WindowWidth  -12;
+            ballPositionY = Console.WindowHeight -8;
         }
 
         static void RemoveScrollBars()
@@ -40,36 +42,177 @@ namespace BreakOut
            
         }
 
+        static void DrawPaddle()
+        {
+            for (int x = 8; x < 9; x++)
+            {
+                PrintAtPosition(x, Console.WindowHeight - 32, '|');
+                PrintAtPosition(x, Console.WindowHeight - 33, '#');
+            }
+            //PrintAtPosition(68, Console.WindowHeight - 32, '\');
+            //PrintAtPosition(68, Console.WindowHeight - 32, ' \');
+            //PrintAtPosition(68, Console.WindowHeight - 32, '  = ');
+            //PrintAtPosition(68, Console.WindowHeight - 32, 'CLUB: IRON  ');
+            Console.SetCursorPosition(69, Console.WindowHeight - 35);
+            Console.WriteLine("\\");
+            Console.SetCursorPosition(69, Console.WindowHeight - 34);
+            Console.WriteLine(" \\");
+            if (clubLength == 1)
+            {
+                Console.SetCursorPosition(69, Console.WindowHeight - 33);
+                Console.WriteLine("  -- ");
+                Console.SetCursorPosition(69, Console.WindowHeight - 32);
+                Console.WriteLine("PUTTER");
+            }
+            if (clubLength == 5)
+            {
+                Console.SetCursorPosition(69, Console.WindowHeight - 33);
+                Console.WriteLine("  -= ");
+                Console.SetCursorPosition(69, Console.WindowHeight - 32);
+                Console.WriteLine("IRON  ");
+            }
+            if (clubLength == 10)
+            {
+                Console.SetCursorPosition(69, Console.WindowHeight - 33);
+                Console.WriteLine("  <@>");
+                Console.SetCursorPosition(69, Console.WindowHeight - 32);
+                Console.WriteLine("DRIVER");
+            }
+            
+            //Console.ReadLine();
+        }
+
+
+        static void Drift()
+        {
+
+            switch (clubDrift)
+            {
+                case 0:
+                    {
+                        
+                        break;
+                    }
+                case 1:
+                    {
+                        
+                        break;
+                    }
+                case 2:
+                    {
+                        break;
+                    }
+                case 3:
+                    {
+                        int driftDirection;
+                        Random variableName = new Random();
+                        driftDirection = variableName.Next(0, 4);
+                        if(driftDirection==0)
+                        {
+                            ballDirectionY++;
+                        }
+                        else if (driftDirection == 1)
+                        {
+                            ballDirectionY--;
+                        }
+                        else if (driftDirection == 2)
+                        {
+                            ballDirectionX++;
+                        }
+                        else if (driftDirection == 3)
+                        {
+                            ballDirectionX--;
+                        }
+                        
+                        break;
+                    }
+                case 4:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+
+        }
+
+
+
+
         private static void MoveBall()
         {
             ballPositionX += ballDirectionX;
             ballPositionY += ballDirectionY;
+            //Console.WriteLine($"{ballDirectionX}{ballDirectionY}");
 
-           
+            /*
+            if (|distance from center| > 50)
+            {
+                ballPositionX = 50*
+                ballPositionY = 50*
+            }
+            */
+
+            if (ballPositionX > 70)
+            {
+                ballPositionX = 70;
+            }
+            if (ballPositionX < 3)
+            {
+                ballPositionX = 3;
+            }
+            if (ballPositionY < 3)
+            {
+                ballPositionY = 3;
+            }
+            if (ballPositionY > 35)
+            {
+                ballPositionY = 35;
+            }
+
+
+
         }
 
         static void BallRight ()
         {
+            //Console.WriteLine(ballPositionX);
             ballDirectionX = 1;
             ballDirectionY = 0;
+            Drift();
+            
         }
+
 
         static void BallLeft()
         {
+            //Console.WriteLine(ballPositionX);
             ballDirectionX = -1;
             ballDirectionY = 0;
+            Drift();
+            
         }
 
         static void BallUp()
         {
-            ballDirectionX = 0;
-            ballDirectionY = 1;
+            
+                //Console.WriteLine(ballPositionY);
+                ballDirectionX = 0;
+                ballDirectionY = 1;
+                Drift();
+            
         }
 
         static void BallDown()
         {
-            ballDirectionX = 0;
-            ballDirectionY = -1;
+            
+                //Console.WriteLine(ballPositionY);
+                ballDirectionX = 0;
+                ballDirectionY = -1;
+                Drift();
+            
         }
 
 
@@ -78,6 +221,7 @@ namespace BreakOut
         {
             lock (lockObject)
             {
+               
                 Console.SetCursorPosition(x, y);
                 Console.Write(symbol);
             }
@@ -110,21 +254,35 @@ namespace BreakOut
 
         static void Main(string[] args)
         {
-            Console.WindowWidth = 50;
-            Console.BufferWidth = 50;
+            Console.WindowWidth = 80;
+            Console.BufferWidth = 80;
+            Console.WindowHeight = 40;
+
             RemoveScrollBars();
             Init();
             
+
+
             int lineCounter = 0;
-            Console.WriteLine(" ,    ,  .  , .    ,   <||   .,  , ,  .  , ,      ");
-            Console.WriteLine(" ,  , .  ,  .  , .      ||    .,  , ,  .  ,    . ,");
+            Console.WriteLine(". ,  , .  ,  .  , .   .     .,  , ,  .  ,    .    , . ,  PAR:13     ");
+            Console.WriteLine(" ,  ,   ,  .  , .   .  ,  .  .,  , ,  ,     .     , . , .  ,  .  , ,");
+            Console.WriteLine(" ,  ,   ,  .  , .   .  ,  .  .,  , ,  ,     .     , . , .  ,  .  , ,");
+            Console.WriteLine(". ,  , .  ,  .  , .   .     .,  , ,  .  ,    .    , . ,   ,  .  .   ");
+            Console.WriteLine(" ,  ,   ,  .  , .   .  ,  .  .,  , ,  ,     .     , . , .  ,  .  , ,");
+            Console.WriteLine(". ,  , .  ,  .  , .   .     .,  , ,  .  ,    .    , . ,   ,  .  .   ");
+            Console.WriteLine(" ,  ,   ,  .  , .   .        .,  , ,  .  ,  .  , , .   , .     , . ,");
+            Console.WriteLine("        #   .,  , ,  .  , ,      ,        .   , .  , . , ,   .   ,  ");
+            Console.WriteLine(" ,      |    .,  , ,  .  ,    .     ,   .   ,  , . ,   .   .       ,");
+            Console.WriteLine(" ,  ,   ,  .  , .   .        .,  , ,  .  ,  .  ,      . ,      . , ,");
             while (lineCounter < 13)
 
             {
-                Console.WriteLine(" ,  ,   ,  .  , .   .  ,  .  .,  , ,  .  ,  .  , ,");
-                Console.WriteLine(". ,  , .  ,  .  , .   .     .,  , ,  .  ,  .  .   ");
+                Console.WriteLine(" ,  ,   ,  .  , .   .  ,  .  .,  , ,  ,     .     , . , .  ,  .  , ,");
+                Console.WriteLine(". ,  , .  ,  .  , .   .     .,  , ,  .  ,    .    , . ,   ,  .  .   ");
                 lineCounter++;
             }
+
+
 
             new Thread(() =>
             {
@@ -134,40 +292,98 @@ namespace BreakOut
                     if (Console.KeyAvailable)
                     {
                         RemoveBall();
+                        //these four are for hitting the ball
                         ConsoleKeyInfo keyInfo = Console.ReadKey();
                         if (keyInfo.Key == ConsoleKey.RightArrow)
                         {
                             point++;
                             BallRight();
-                            MoveBall();
-                            
+                            for (int i = 0; i < clubLength; i++)
+                            {
+                                Random variableName = new Random();
+                                clubDrift = variableName.Next(0, 5);
+                                MoveBall();
+                            }
                         }
                         if (keyInfo.Key == ConsoleKey.LeftArrow)
                         {
                             point++;
                             BallLeft();
-                            MoveBall();
-                            
+                            for (int i = 0; i < clubLength; i++)
+                            {
+                                Random variableName = new Random();
+                                clubDrift = variableName.Next(0, 5);
+                                MoveBall();
+                            }
+
                         }
                         if (keyInfo.Key == ConsoleKey.UpArrow)
                         {
                             point++;
                             BallDown();
-                            MoveBall();
-                            
+                            for (int i = 0; i < clubLength; i++)
+                            {
+                                Random variableName = new Random();
+                                clubDrift = variableName.Next(0, 5);
+                                MoveBall();
+                            }
+
                         }
                         if (keyInfo.Key == ConsoleKey.DownArrow)
                         {
                             point++;
                             BallUp();
-                            MoveBall();
-                            
-                        }
-                        DrawBall();
+                            for (int i = 0; i < clubLength; i++)
+                            {
+                                Random variableName = new Random();
+                                clubDrift = variableName.Next(0, 5);
+                                MoveBall();
+                            }
 
-                        if (ballPositionY== 1 && ballPositionX >= 24 && ballPositionX <=25)
+                        }
+
+                        //these are for deciding the clubs 
+
+                        //Random length = new Random();
+
+                        
+
+                        if (keyInfo.Key == ConsoleKey.I)
                         {
-                            Console.Write($"\n\n\n\nscore:{point}");
+                            //Random length = new Random();
+
+                            //static int GenerateRandomNumBetween1and6();
+
+                            //Random variableName = new Random();
+
+                            //clubLength = Random.Next(2, 4);
+
+                            //clubLength= variableName.Next(2, 5);
+
+                            clubLength = 5;
+                        }
+
+                        if (keyInfo.Key == ConsoleKey.D)
+                        {
+                            clubLength = 10;
+
+                        }
+
+                        if (keyInfo.Key == ConsoleKey.P)
+                        {
+                            clubLength = 1;
+
+                        }
+
+
+
+                        DrawPaddle();
+
+                        DrawBall();
+                        //win
+                        if (ballPositionY== 8 && ballPositionX >= 7 && ballPositionX <=8)
+                        {
+                            Console.Write($"\n\n\n\ntotal strokes:{point}");
                         }
 
                     }
